@@ -2,8 +2,8 @@ from pyray import *
 from os.path import join as os
 
 # CONSTANTS
-WINDOW_WIDTH = 100
-WINDOW_HEIGHT = 100
+WINDOW_WIDTH = 200
+WINDOW_HEIGHT = 200
 
 # VARIABLES
 oldx = 0
@@ -11,11 +11,25 @@ oldy = 0
 newx = 0
 newy = 0
 
+# SAVE
+open('saves/save', 'a')
+
+read = open('saves/save', 'r')
+
+readlist = read.readlines()
+
+if readlist: 
+    savex = float(readlist[0])
+    savey = float(readlist[1])
+else:
+    savex = 45
+    savey = 45
+
 # RAW SPRITES
 raw_bkg = os('assets', 'bkg.png')
 
 # PLAYER 
-player = Rectangle(45, 45, 10, 10)
+player = Rectangle(savex, savey, 10, 10)
 playerspd = 1
 playermaxspd = 3
 
@@ -83,10 +97,12 @@ while not window_should_close():
         dbtoggle = not dbtoggle
 
     if dbtoggle == True:
-        draw_text(f'pos: {round(player.x,3,), round(player.y,3)}\nspd: {round(spdx, 3), round(spdy,3)}\nfps: {get_fps()}', 0, 0, 2, RAYWHITE)
+        draw_text(f'pos: {round(player.x,2,), round(player.y,2)}\nspd: {round(spdx, 2), round(spdy,2)}\nfps: {get_fps()}', 0, 0, 2, RAYWHITE)
         
     # SPEED CALC
     oldx = newx; oldy = newy
     
     end_drawing()
 close_window()
+save = open('saves/save', 'w')
+save.write(f'{player.x}\n{player.y}')
