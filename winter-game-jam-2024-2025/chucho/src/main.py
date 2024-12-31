@@ -6,7 +6,7 @@ set_target_fps(60)
 
 while not window_should_close():
     begin_drawing()
-#balls
+# test
 
 
     end_drawing()
