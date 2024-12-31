@@ -16,7 +16,8 @@ raw_bkg = os('assets', 'bkg.png')
 
 # PLAYER 
 player = Rectangle(45, 45, 10, 10)
-playerspd = 2
+playerspd = 1
+playermaxspd = 3
 
 # DEFINE CAMERA
 camera = Camera2D()
@@ -30,7 +31,7 @@ init_window(WINDOW_WIDTH,WINDOW_HEIGHT,"chucho")
 set_target_fps(60)
 
 # LOAD TEXTURES
-bkg = load_texture(raw_bkg)
+# bkg = load_texture(raw_bkg)
 
 while not window_should_close():
 
@@ -50,6 +51,13 @@ while not window_should_close():
         player.y += playerspd
     if is_key_down(KEY_D):
         player.x += playerspd
+    if playerspd < playermaxspd and playerspd > -playermaxspd:
+        if spdx or spdy > 0 and playerspd < 5:
+            playerspd += .03
+        if spdx or spdy < 0 and playerspd > -5:
+            playerspd += .03
+    if spdx == 0 and spdy == 0:
+        playerspd = 1
     # CAMERA
     camera.target = Vector2(player.x + player.width / 2, player.y + player.height / 2)
     camera.offset = Vector2(WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2)
@@ -75,13 +83,10 @@ while not window_should_close():
         dbtoggle = not dbtoggle
 
     if dbtoggle == True:
-        draw_text(f'px: {player.x}, py: {player.y}\nspd: {spdx, spdy}', 0, 0, 2, RAYWHITE)
+        draw_text(f'px: {player.x}, py: {player.y}\nspds: {spdx}\nspdy: {spdy}\nfps: {get_fps()}', 0, 0, 2, RAYWHITE)
         
     # SPEED CALC
     oldx = newx; oldy = newy
-
-    # BACKGROUND
-    draw_texture_ex(bkg, Vector2(0, 0), 0, 1, WHITE)
-      
+    
     end_drawing()
 close_window()
