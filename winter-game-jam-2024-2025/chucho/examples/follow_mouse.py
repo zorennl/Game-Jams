@@ -16,13 +16,13 @@ while not window_should_close():
 
     dx = get_mouse_x()-playerx
     dy = get_mouse_y()-playery
-
+    
     if dx == 0:
-        angle = m.pi
-    else: angle = dy/dx
-
-    dx = int(m.cos(m.atan(angle))*dist)
-    dy = int(m.sin(m.atan(angle))*dist)
+        dy = -1*dist
+    else: 
+        angle = dy/dx
+        dx = int(m.cos(m.atan(angle))*dist)
+        dy = int(m.sin(m.atan(angle))*dist)
 
     if get_mouse_x() < playerx:
         dx *= -1
