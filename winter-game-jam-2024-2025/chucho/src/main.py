@@ -1,4 +1,5 @@
 from pyray import *
+from os.path import join as os
 
 # CONSTANTS
 WINDOW_WIDTH = 100
@@ -10,13 +11,16 @@ oldy = 0
 newx = 0
 newy = 0
 
+# RAW SPRITES
+raw_bkg = os('assets', 'bkg.png')
+
 # PLAYER 
 player = Rectangle(45, 45, 10, 10)
 playerspd = 2
 
 # DEFINE CAMERA
 camera = Camera2D()
-camera.zoom = 1
+camera.zoom = .5
 
 # DEBUG TOGGLE
 dbtoggle = False
@@ -24,6 +28,9 @@ dbtoggle = False
 set_config_flags(FLAG_WINDOW_UNDECORATED)
 init_window(WINDOW_WIDTH,WINDOW_HEIGHT,"chucho")
 set_target_fps(60)
+
+# LOAD TEXTURES
+bkg = load_texture(raw_bkg)
 
 while not window_should_close():
 
@@ -45,7 +52,8 @@ while not window_should_close():
         player.x += playerspd
 
     # CAMERA
-    camera.target = Vector2(player.x - 45, player.y - 45)
+    camera.target = Vector2(player.x, player.y)
+    camera.offset = Vector2((WINDOW_WIDTH / 2 - (player.width /2)),(WINDOW_HEIGHT / 2 - (player.height /2)))
     
     # DRAWING
     begin_drawing()
@@ -72,6 +80,9 @@ while not window_should_close():
         
     # SPEED CALC
     oldx = newx; oldy = newy
+
+    # BACKGROUND
+    draw_texture_ex(bkg, Vector2(0, 0), 0, 1, WHITE)
       
     end_drawing()
 close_window()
