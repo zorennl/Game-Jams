@@ -20,7 +20,7 @@ playerspd = 2
 
 # DEFINE CAMERA
 camera = Camera2D()
-camera.zoom = .5
+camera.zoom = 1
 
 # DEBUG TOGGLE
 dbtoggle = False
@@ -50,10 +50,9 @@ while not window_should_close():
         player.y += playerspd
     if is_key_down(KEY_D):
         player.x += playerspd
-
     # CAMERA
-    camera.target = Vector2(player.x, player.y)
-    camera.offset = Vector2((WINDOW_WIDTH / 2 - (player.width /2)),(WINDOW_HEIGHT / 2 - (player.height /2)))
+    camera.target = Vector2(player.x + player.width / 2, player.y + player.height / 2)
+    camera.offset = Vector2(WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2)
     
     # DRAWING
     begin_drawing()
@@ -76,7 +75,7 @@ while not window_should_close():
         dbtoggle = not dbtoggle
 
     if dbtoggle == True:
-        draw_text(f'px: {player.x}, py: {player.y}\nspd: {spdx, spdy}', 0, 0, 2, WHITE)
+        draw_text(f'px: {player.x}, py: {player.y}\nspd: {spdx, spdy}', 0, 0, 2, RAYWHITE)
         
     # SPEED CALC
     oldx = newx; oldy = newy
