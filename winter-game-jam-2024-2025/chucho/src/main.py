@@ -68,7 +68,7 @@ while not window_should_close():
         dbtoggle = not dbtoggle
 
     if dbtoggle == True:
-        draw_text(f'px: {player.x}, py: {player.y}\n spd: {spdx, spdy}', 0, 0, 2, WHITE)
+        draw_text(f'px: {player.x}, py: {player.y}\nspd: {spdx, spdy}', 0, 0, 2, WHITE)
         
     # SPEED CALC
     oldx = newx; oldy = newy
