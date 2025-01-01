@@ -1,6 +1,6 @@
 from pyray import *
 from os.path import join as os
-
+import math as m
 # CONSTANTS
 WINDOW_WIDTH = 200
 WINDOW_HEIGHT = 200
@@ -12,9 +12,9 @@ newx = 0
 newy = 0
 
 # SAVE
-open('saves/save', 'a')
+open('saves\\save', 'a')
 
-read = open('saves/save', 'r')
+read = open('saves\\save', 'r')
 
 readlist = read.readlines()
 
@@ -32,6 +32,23 @@ raw_bkg = os('assets', 'bkg.png')
 player = Rectangle(savex, savey, 10, 10)
 playerspd = 1
 playermaxspd = 3
+
+# WEAPON TO MOUSE
+def normAngle(px,py,dist):
+    mx = get_mouse_x()
+    my = get_mouse_y()
+    dx = mx-px; dy = my-py
+    if dx == 0:
+        if dy > 0:
+            dy = dist
+        else: dy = -1*dist
+    else:
+        angle = m.atan(dy/dx)
+        dx = int(m.cos(angle)*dist)
+        dy = int(m.sin(angle)*dist)
+    if mx < px:
+        dx *= -1; dy *= -1
+    return (dx,dy)
 
 # DEFINE CAMERA
 camera = Camera2D()
@@ -82,7 +99,13 @@ while not window_should_close():
     
     begin_mode_2d(camera)
     
+    # DRAW PLAYER
     draw_rectangle_rec(player, WHITE)
+    
+    # DRAW WEAPON
+    weaponPos = Vector2(normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[0],
+                        normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[1])
+    draw_circle_v(vector2_add(weaponPos,camera.target),5,ORANGE)
 
     # POSITION MARKERS
     draw_rectangle(0, 0, 10, 10, RED)
