@@ -33,6 +33,16 @@ player = Rectangle(savex, savey, 10, 10)
 playerspd = 1
 playermaxspd = 3
 
+# ENEMY
+box1 = Rectangle(0,0,10,10)
+drawbox1 = True
+box2 = Rectangle(0,90,10,10)
+drawbox2 = True
+box3 = Rectangle(90,0,10,10)
+drawbox3 = True
+box4 = Rectangle(90,90,10,10)
+drawbox4 = True
+
 # WEAPON TO MOUSE
 def normAngle(px,py,dist):
     mx = get_mouse_x()
@@ -96,23 +106,47 @@ while not window_should_close():
     # DRAWING
     begin_drawing()
     clear_background(BLACK)
-    
+        
     begin_mode_2d(camera)
     
     # DRAW PLAYER
     draw_rectangle_rec(player, WHITE)
-    
+       
     # DRAW WEAPON
     weaponPos = Vector2(normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[0],
                         normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[1])
-    draw_circle_v(vector2_add(weaponPos,camera.target),5,ORANGE)
+    weapon = vector2_add(weaponPos, camera.target)
+    draw_circle_v(weapon,5,ORANGE)
+    
+    collisionbox1 = check_collision_circle_rec(weapon, 5, box1)
 
+    if collisionbox1 == True:
+        drawbox1 = False
+
+    collisionbox2 = check_collision_circle_rec(weapon, 5, box2)
+
+    if collisionbox2 == True:
+        drawbox2 = False
+
+    collisionbox3 = check_collision_circle_rec(weapon, 5, box3)
+
+    if collisionbox3 == True:
+        drawbox3 = False
+
+    collisionbox4 = check_collision_circle_rec(weapon, 5, box4)
+
+    if collisionbox4 == True:
+        drawbox4 = False
+    
     # POSITION MARKERS
-    draw_rectangle(0, 0, 10, 10, RED)
-    draw_rectangle(90, 0, 10, 10, RED)
-    draw_rectangle(90, 90, 10, 10, RED)
-    draw_rectangle(0, 90, 10, 10, RED)
-        
+    if drawbox1 == True:
+        draw_rectangle_rec(box1, RED)
+    if drawbox2 == True:
+        draw_rectangle_rec(box2, RED)
+    if drawbox3 == True:
+        draw_rectangle_rec(box3, RED)
+    if drawbox4 == True:
+        draw_rectangle_rec(box4, RED)
     end_mode_2d()
     
     # DEBUG
