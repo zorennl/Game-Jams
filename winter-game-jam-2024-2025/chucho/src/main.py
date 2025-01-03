@@ -144,11 +144,11 @@ while not window_should_close():
         enemyNumber += 1
     
     if is_key_pressed(KEY_ONE):
-        spawn = get_random_value(1,200)
-        enemyList.append(enemy(int(m.sin(spawn)),int(m.cos(spawn)),3,1))
+        spawn = get_random_value(1000,int(m.tau*1000))/1000
+        enemyList.append(enemy(int(m.sin(spawn)*200),int(m.cos(spawn)*200),3,1))
     if is_key_pressed(KEY_TWO):
-        spawn = get_random_value(1,200)
-        enemyList.append(enemy(int(m.sin(spawn)),int(m.cos(spawn)),2,2))
+        spawn = get_random_value(1000,int(m.tau*1000))/1000
+        enemyList.append(enemy(int(m.sin(spawn)*200),int(m.cos(spawn)*200),2,2))
        
     # DRAW WEAPON
     weaponPos = Vector2(moveTowards(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[0],
