@@ -44,10 +44,8 @@ box4 = Rectangle(90,90,10,10)
 drawbox4 = True
 
 # WEAPON TO MOUSE
-def normAngle(px,py,dist):
-    mx = get_mouse_x()
-    my = get_mouse_y()
-    dx = mx-px; dy = my-py
+def normAngle(x1,y1,x2,y2,dist):
+    dx = x2-x1; dy = y2-y1
     if dx == 0:
         if dy > 0:
             dy = dist
@@ -56,7 +54,7 @@ def normAngle(px,py,dist):
         angle = m.atan(dy/dx)
         dx = int(m.cos(angle)*dist)
         dy = int(m.sin(angle)*dist)
-    if mx < px:
+    if x2 < x1:
         dx *= -1; dy *= -1
     return (dx,dy)
 
@@ -113,8 +111,8 @@ while not window_should_close():
     draw_rectangle_rec(player, WHITE)
        
     # DRAW WEAPON
-    weaponPos = Vector2(normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[0],
-                        normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 30)[1])
+    weaponPos = Vector2(normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[0],
+                        normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[1])
     weapon = vector2_add(weaponPos, camera.target)
     draw_circle_v(weapon,5,ORANGE)
     
