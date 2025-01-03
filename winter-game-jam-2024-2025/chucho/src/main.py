@@ -30,21 +30,43 @@ raw_bkg = os('assets', 'bkg.png')
 
 # PLAYER 
 player = Rectangle(savex, savey, 10, 10)
-playerspd = 1
+playerspd = 12
 playermaxspd = 3
 
 # ENEMY
-box1 = Rectangle(0,0,10,10)
-drawbox1 = True
-box2 = Rectangle(0,90,10,10)
-drawbox2 = True
-box3 = Rectangle(90,0,10,10)
-drawbox3 = True
-box4 = Rectangle(90,90,10,10)
-drawbox4 = True
+enemyList = []
+class enemy:
+    def __init__(self,x,y,spd,type):
+        self.x = x
+        self.y = y
+        self.spd = spd
+        self.type = type
+    def move(self):
+        if self.type == 1:
+            self.x += moveTowards(self.x, self.y, player.x, player.y, self.spd)[0]
+            self.y += moveTowards(self.x, self.y, player.x, player.y, self.spd)[1]
+        if self.type == 2:
+            try: self.vx += 0
+            except: self.vx = 0
 
-# WEAPON TO MOUSE
-def normAngle(x1,y1,x2,y2,dist):
+            try: self.vy += 0
+            except: self.vy = 0
+
+            randspd = get_random_value(1,10)*.1
+            self.vx += moveTowards(self.x, self.y, player.x, player.y, self.spd * randspd)[0]
+            self.vy += moveTowards(self.x, self.y, player.x, player.y, self.spd * randspd)[1]
+            self.vx *= .8; self.vy *= .8
+            self.x += self.vx; self.y += self.vy
+
+
+box1 = Rectangle(0,0,10,10)
+box2 = Rectangle(0,90,10,10)
+box3 = Rectangle(90,0,10,10)
+box4 = Rectangle(90,90,10,10)
+
+
+# MOVE TOWARDS
+def moveTowards(x1,y1,x2,y2,dist):
     dx = x2-x1; dy = y2-y1
     if dx == 0:
         if dy > 0:
@@ -106,45 +128,40 @@ while not window_should_close():
     clear_background(BLACK)
         
     begin_mode_2d(camera)
+
     
     # DRAW PLAYER
     draw_rectangle_rec(player, WHITE)
+
+    # DRAW ENEMY
+    enemyNumber = 0
+    for item in enemyList:
+        draw_rectangle(int(item.x),int(item.y),10,10,GREEN)
+        item.move()
+        if abs(item.x-weapon.x) < 10:
+            if abs(item.y-weapon.y) < 10:
+                enemyList.pop(enemyNumber)
+        enemyNumber += 1
+    
+    if is_key_pressed(KEY_ONE):
+        spawn = get_random_value(1,200)
+        enemyList.append(enemy(int(m.sin(spawn)),int(m.cos(spawn)),3,1))
+    if is_key_pressed(KEY_TWO):
+        spawn = get_random_value(1,200)
+        enemyList.append(enemy(int(m.sin(spawn)),int(m.cos(spawn)),2,2))
        
     # DRAW WEAPON
-    weaponPos = Vector2(normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[0],
-                        normAngle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[1])
+    weaponPos = Vector2(moveTowards(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[0],
+                        moveTowards(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, get_mouse_x(), get_mouse_y(), 30)[1])
     weapon = vector2_add(weaponPos, camera.target)
     draw_circle_v(weapon,5,ORANGE)
     
-    collisionbox1 = check_collision_circle_rec(weapon, 5, box1)
-
-    if collisionbox1 == True:
-        drawbox1 = False
-
-    collisionbox2 = check_collision_circle_rec(weapon, 5, box2)
-
-    if collisionbox2 == True:
-        drawbox2 = False
-
-    collisionbox3 = check_collision_circle_rec(weapon, 5, box3)
-
-    if collisionbox3 == True:
-        drawbox3 = False
-
-    collisionbox4 = check_collision_circle_rec(weapon, 5, box4)
-
-    if collisionbox4 == True:
-        drawbox4 = False
     
     # POSITION MARKERS
-    if drawbox1 == True:
-        draw_rectangle_rec(box1, RED)
-    if drawbox2 == True:
-        draw_rectangle_rec(box2, RED)
-    if drawbox3 == True:
-        draw_rectangle_rec(box3, RED)
-    if drawbox4 == True:
-        draw_rectangle_rec(box4, RED)
+    draw_rectangle_rec(box1, RED)
+    draw_rectangle_rec(box2, RED)
+    draw_rectangle_rec(box3, RED)
+    draw_rectangle_rec(box4, RED)
     end_mode_2d()
     
     # DEBUG
